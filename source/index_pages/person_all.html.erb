@@ -1,0 +1,96 @@
+---
+title: "作業中　作家リスト"
+ttStr: "全て"
+---
+
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title><%= current_page.data.title %>：<%= current_page.data.ttStr %></title>
+<style type="text/css">
+<!--
+body{
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-bottom: 5%;
+    line-height: 150%;
+}
+a:hover{
+    color: white;
+    background-color: #0000ff;
+}
+h1{
+    color: black;
+    background-color: #ffffcc;
+    padding: 10pt;
+    border-color: black;
+    border-width: 1pt 0 1pt 0;
+    border-style: solid none solid none;
+    font-size: 150%;
+}
+h2{
+    color: black;
+    background-color: #d3d3d3;
+    padding: 5pt;
+    border-color: black;
+    border-width: 1pt 0 1pt 0;
+    border-style: solid none solid none;
+    text-indent: 1em;
+}
+table{
+    margin-left: 1em;
+    padding: 0.5em 0em 0.5em 1em;
+}
+td{
+    line-height:150%;
+}
+ol{
+    padding: 0.5em 0em 0.5em 2em;
+    margin-left: 2em;
+    line-height: 150%;
+}
+div.copyright{
+    background-color: white;
+    margin: 0.5em 0em 0.5em 2em;
+}
+span.current{
+    font-weight: bold;
+    color: red;
+}
+-->
+</style>
+</head>
+
+<body text="#000000" bgcolor="#f0f8ff" link="#0000ff" vlink="#00008B" alink="#ff0000">
+<a name="top">&nbsp;</a>
+<div align="right">●<a href="../index.html">トップ</a>　●<a href="<%= idxPage %>">インデックス</a>　●<span class="current">作家リスト</span></div>
+
+<div align="center"><h1><%= title %>：<%= ttStr %></h1></div>
+
+<div align="right">
+<%= linkStr %>
+</div>
+<br />
+<div align="left">
+→<a href="list_person_all.zip">「公開中　作家別作品一覧：全て(CSV形式、zip圧縮）」をダウンロード</a>
+</div>
+<div align="left">
+→<a href="list_person_all_extended.zip">「公開中　作家別作品一覧拡充版：全て(CSV形式、zip圧縮）」をダウンロード</a>
+</div>
+<div align="left">
+→<a href="list_person_all_utf8.zip">「公開中　作家別作品一覧：全て(CSV形式、UTF-8、zip圧縮）」をダウンロード</a>
+</div>
+<div align="left">
+→<a href="list_person_all_extended_utf8.zip">「公開中　作家別作品一覧拡充版：全て(CSV形式、UTF-8、zip圧縮）」をダウンロード</a>
+</div>
+<%= listStr %>
+
+<hr>
+
+<div>●作家リスト<% author_list_index(first_char) %>
+<br>
+●<a href="../index.html">トップ</a>　●<a href="<%= idxPage %>">インデックス</a></div>
+
+</body>
+</html>
