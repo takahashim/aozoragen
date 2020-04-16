@@ -1,3 +1,4 @@
+
 <html lang="ja">
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
@@ -77,7 +78,7 @@ span.current{
 
 <a name="top">&nbsp;</a>
 
-<div align="right">●<a href="../index.html">トップ</a>　●<a href="index_top.html">インデックス</a>／<a href="index_all.html">全</a>　●作家リスト：<a href="person_<%= listURL %>">公開</a>／<a href="person_inp_<%= listURL %>">作業</a>／<a href="person_all_<%= listURL %>">全</a>　●<span class="current">作家別作品リスト</span></div>
+<div align="right">●<a href="../index.html">トップ</a>　●<a href="index_top.html">インデックス</a>／<a href="index_all.html">全</a>　●作家リスト：<%= link_to_person_list_by_kana(person['name_kana'], :open) %>／<%= link_to_person_list_by_kana(person['name_kana'], :input) %>／<%= link_to_person_list_by_kana(person['name_kana'], :all) %>　●<span class="current">作家別作品リスト</span></div>
 
 <div align="center"><h1>作家別作品リスト：No.<%= person['id'] %></h1></div>
 
@@ -114,12 +115,8 @@ span.current{
 
 <ol>
 <% person["work"] && person["work"].each do |book| %>
-<li><%= link_to book['title'], sprintf("../cards/%06d/card%d.html", person["id"], book["work_id"]) %>　<%= book['subtitle'] %>（<%= book['kana_type'] %>、作品ID：<%= book['work_id'] %>）　
-<% book["others"]&.each do |author2| -%>
-　　 →<a href="person<%= author2['person_id'] %>.html"><%= author2['person_name'] %></a>(<%= author2['role'] %>)
-<%-   end -%>
-</li>
-<% end -%>
+<li><%= link_to_card(person, book) %>　<%= book['subtitle'] %>（<%= book['kana_type'] %>、作品ID：<%= book['work_id'] %>）　<% book["others"]&.each_with_index { |author2, idx| %><%= idx==0 ? ' ' : '' %>　　 →<a href="person<%= author2['person_id'] %>.html"><%= author2['person_name'] %></a>(<%= author2['role'] %>) <%- } -%></li>
+<% end %>
 </ol>
 
 <h2><a name="sakuhin_list_2">作業中の作品</a></h2>
@@ -129,9 +126,7 @@ span.current{
 <ol>
 <% person["wip"]&.each do |book| %>
 <li><%= book['title']%>　<%= book['subtitle']%>（<%= book['kana_type'] %>、作品ID：<%= book['work_id'] %>）　
-<% book["others"]&.each do |author2| -%>
-→<a href="person<%= author2['person_id'] %>.html"><%= author2['person_name'] %></a>(<%= author2['role'] %>)
-<%-   end -%>
+<% book["others"]&.each { |author2| %>→<a href="person<%= author2['person_id'] %>.html"><%= author2['person_name'] %></a>(<%= author2['role'] %>)<%   } %>
 </li>
 <% end %>
 </ol>
