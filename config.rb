@@ -3,32 +3,16 @@
 
 require 'lib/aozoragen/helpers'
 helpers Aozoragen::Helpers
+require 'date'
 
 activate :autoprefixer do |prefix|
   prefix.browsers = "last 2 versions"
 end
 
-# Layouts
-# https://middlemanapp.com/basics/layouts/
-
 # Per-page layout changes
 page '/*.xml', layout: false
 page '/*.json', layout: false
 page '/*.txt', layout: false
-
-# With alternative layout
-# page '/path/to/file.html', layout: 'other_layout'
-
-# Proxy pages
-# https://middlemanapp.com/advanced/dynamic-pages/
-
-# proxy(
-#   '/this-page-has-no-template.html',
-#   '/template-file.html',
-#   locals: {
-#     which_fake_page: 'Rendering a fake page with a local variable'
-#   },
-# )
 
 Aozoragen::Helpers::FIRST_CHAR_MAP.keys.each do |char|
   proxy "index_pages/person_#{char}.html", "index_pages/person_tmpl.html", locals: {first_char: char}, ignore: true
@@ -46,6 +30,19 @@ data.card.each do |card|
   proxy "cards/#{"%06d" % card['title']['person_id']}/card#{card['title']['work_id']}.html",
         "cards/card_tmpl.html",
         locals: {card: card, listURL: ""},
+        ignore: true
+end
+
+## TODO: 1/1を考慮する
+whatsnew_size = data.whatsnew.size
+cur_year = Time.now.year
+cur_date = Time.now.strftime("%Y-%m-%d").split("-").map(&:to_i).join(".")
+page_count = (whatsnew_size / Aozoragen::Helpers::PAGE_ROW) + 1
+page_count.times do |i|
+  proxy "index_pages/whatsnew#{i+1}.html",
+        "index_pages/whatsnew_tmpl.html",
+        locals: {page_idx: i, cur_year: cur_year, title: "新規公開作品　#{cur_year}年公開分", page_max: page_count,
+                 cur_date: cur_date},
         ignore: true
 end
 

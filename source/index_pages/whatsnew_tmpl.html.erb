@@ -1,0 +1,127 @@
+<html>
+<head>
+<title>新規公開作品</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+body{
+    background: #f0f8ff;
+    margin-left:3%;
+    margin-right:3%;
+    margin-top:3%;
+    margin-bottom:2%;
+    line-height: 150%;
+}
+
+h1{
+    padding: 10pt;
+    background-color: #ffffcc;
+    font-size: 150%;
+    text-align: center;
+    border-color: black;
+    border-width: 1pt 0 1pt 0;
+    border-style: solid none solid none;
+}
+
+table.list{
+    background-color: #ffffff;
+}
+
+td.title {
+    valign: top;
+    align: center;
+    background: #ffffcc;
+    collor: #000000;
+}
+
+td.normal {
+    background: #ffffff;
+    collor: #000000;
+}
+
+a:hover{
+    color: white;
+    background-color: #0000ff;}
+// end -->
+</style>
+</head>
+<body>
+<h1><%= title %></h1>
+<div align="center">
+最終更新日　<%= cur_date %><br>
+<br>
+<% if title.start_with?("新規") %>
+新規公開作品は、表の上のほうに追加されていきます。<br>
+公開から１週間以内の作品は、「公開日」が赤で表示されています。<br>
+<% end %>
+</div>
+<br>
+<center>
+<%= page_str_index("whatsnew", page_max.value, page_idx + 1) %>
+<!--table align=center border=0>
+    <tr>
+        <td align="left" valign="bottom"></td>
+        <td  align="right" valign="bottom">ページ：<font size="5">1</font> <a href="whatsnew_02.html">2</a> <a href="whatsnew_03.html">3</a> </td>
+        <td width=90 align="right" valign="bottom"><a href="whatsnew_02.html">次の50件</a></td>
+    </tr>
+</table-->
+<table cellSpacing="1" cellpadding="3" border="1" class="list" width="760">
+      <tr valign="top">
+        <td class="title" width="100">公開日</td>
+        <td class="title" width="220">作品名<br>副題 </td>
+        <td class="title" width="110">著者名 </td>
+        <td class="title" width="110">入力者名</td>
+        <td class="title" width="110">校正者名</td>
+        <td class="title" width="110">翻訳者名等 </td>
+      </tr>
+<!-------------------------- Loop Start ---------------------------->
+<% data.whatsnew.slice(page_idx * PAGE_ROW, PAGE_ROW).each do |work| %>
+<%
+  work["card_url"] =~ %r{/cards/(\d+)/card(\d+).html$}
+  person_id, book_id = $1, $2
+  author_names = work["author"].select{ |a| a["role"] == '著者' }.map{ |a| a["author_name"] }.join("<br>")
+  other_names = work["author"].select{ |a| a["role"] != '著者' }.map{ |a| a["author_name"] }.join("<br>")
+  published_on = Date.parse(work["published_on"])
+  if Date.today - published_on < 7
+    date = %Q(<font color="red">#{work["published_on"]}</font>)
+  else
+    date = work["published_on"]
+  end
+%>
+      <tr valign="top">
+        <td class="normal"><%= date %></td>
+        <td class="normal"><a href="../cards/<%= person_id %>/card<%= book_id %>.html">
+            <%= work["title"] %></a><br>
+            <%= (work["subtitle"].empty?) ? "　" : work["subtitle"] %></td>
+        <td class="normal"><%= author_names %></td>
+        <td class="normal"><%= work["input"] %></td>
+        <td class="normal"><%= work["proofread"] %></td>
+        <td class="normal"><%= other_names.empty? ? "　" : other_names %></td>
+      </tr>
+<% end %>
+<!-------------------------- Loop End ---------------------------->
+</table>
+<div align="right"><a href="#top" title="このページの先頭へ">▲</a></div>
+<%= page_str_index("whatsnew", page_max.value, page_idx + 1) %>
+<!--table align=center border=0>
+    <tr>
+        <td align=left valign=bottom></td>
+        <td  align=right valign=bottom>ページ：<font size="5">1</font> <a href="whatsnew_02.html">2</a> <a href="whatsnew_03.html">3</a> </td>
+        <td width=90 align=right valign=bottom><a href="whatsnew_02.html">次の50件</a></td>
+    </tr>
+</table-->
+<BR>
+<% if page_idx == page_max.value - 1 %>
+<FONT size="-1">
+<% for yyyy in (2001 ... cur_year) do %>
+<A href="whatsnew_<%= yyyy %>_1.html"><%= yyyy %>年</A><BR>
+<% end %>
+</FONT>
+<% end %>
+</center>
+<br>
+<div align="left">
+●<a href="../index.html">トップページへ</a>　●<a href="index_top.html">総合インデックスへ</a>
+</div>
+</body>
+</html>

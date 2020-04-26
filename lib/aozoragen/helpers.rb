@@ -3,6 +3,8 @@ require 'sort_kana_jisx4061'
 
 module Aozoragen
   module Helpers
+    PAGE_ROW = 50
+
     FIRST_CHAR_MAP = {
       a: "あ", ka: "か", sa: "さ", ta: "た", na: "な",
       ha: "は", ma: "ま", ya: "や", ra: "ら", wa: "わ", zz: "他"
@@ -190,5 +192,35 @@ end
         ''
       end
     end
+
+    # pagenateを文字列として生成する
+    #
+    # cur_num, nax_numは1から始まる(1オリジン)
+    def page_str_index(url, max_num, cur_num, page_size = PAGE_ROW)
+      ## 1ページしかない場合は空文字を返す
+      return "" if max_num < 2
+
+      buf = ""
+      buf << "<table align=center width=700 border=0><tr><td width=90 align=left valign=bottom>"
+      if cur_num > 1
+        buf << %Q|<a href="#{url}#{cur_num - 1}.html">前の#{page_size}件</a>|
+      end
+      buf << %Q|</td><td  align=right valign=bottom>ページ：|
+      1.upto(max_num) do |i|
+        if i == cur_num
+          buf << %Q|<font size="5">#{i}</font> |
+        else
+          buf << %Q|<a href="#{url}#{i}.html">#{i}</a> |
+        end
+      end
+      buf << "</td><td width=90 align=right valign=bottom>"
+      if cur_num < max_num
+        buf << %Q|<a href="#{url}#{cur_num + 1}.html">次の#{page_size}件</a>|
+      end
+      buf << "</td></tr></table>"
+
+      buf
+    end
+
   end
 end
