@@ -71,24 +71,17 @@ span.current{
 <% FIRST_CHAR_MAP_ALL[first_char].each_with_index do |(h,k), idx| %><a href="#sec<%= idx+1 %>">[<%= k %>]</a>　<% end %>
 </div>
 
+<% list = select_list(data.person_detail) %>
 <% FIRST_CHAR_MAP_ALL[first_char].each_with_index do |(h,k), idx| %>
 <h2><a name="sec<%= idx+1 %>"><%= k %></a></h2>
 <ol>
 <%
-  data.send("person_#{first_char}").each do |person|
-
-  next if person["name_first_kana"] != k
-
-  c_str = person["copyright"] ? "　<strong>＊著作権存続＊</strong>" : ""
-  if person["alt_id"]
-  other_name = "(→<a href=\"person#{person['alt_id']}.html\">#{person['alt_name']}</a>)"
-  else
-  other_name = ""
-  end
-  if person["work"].size > 0
+   list[first_char]&.each do |person|
+     ch = make_first_char(person['name_kana'])
+     if ch == k && person["work"].size > 0
 %>
-<li><a href="person<%= person["id"] %>.html"><%= person["name"] %></a>　(公開中：<%= person["work"].size %>)　<%= c_str %>　<%= other_name %></li>
-<% end %>
+<li><a href="person<%= person["id"] %>.html"><%= person["name"] %></a>　(公開中：<%= person["work"].size %>)　<%= copyright_tag(person['copyright'])  %>　<%= base_person_tag(person['alt_id'], person['alt_name']) %></li>
+<%   end %>
 <% end %>
 </ol>
 <div align="right"><a href="#top">▲</a></div>

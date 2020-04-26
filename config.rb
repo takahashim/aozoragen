@@ -32,6 +32,7 @@ page '/*.txt', layout: false
 
 Aozoragen::Helpers::FIRST_CHAR_MAP.keys.each do |char|
   proxy "index_pages/person_#{char}.html", "index_pages/person_tmpl.html", locals: {first_char: char}, ignore: true
+  proxy "index_pages/person_all_#{char}.html", "index_pages/person_all_tmpl.html", locals: {first_char: char}, ignore: true
 end
 
 data.person_detail.each do |person|

@@ -138,8 +138,8 @@ span.current{
 <h2>作品データ</h2>
 
 <table summary="作品データ">
-<% if card['work']['class'] %>
-<tr><td class="header">分類：</td><td><%= card['work']['class'] %></td></tr>
+<% if card['work']['bibclass'] %>
+<tr><td class="header">分類：</td><td><%= card['work']['bibclass'] %></td></tr>
 <% end %>
 <% if card['work']['first_appearance'] %>
 <tr><td class="header">初出：</td><td><%= card['work']['first_appearance'] %></td></tr>
@@ -232,7 +232,7 @@ span.current{
     <td><%= dl['compresstype'] %></td>
     <td><%= download_link(dl['filename']) %></td>
     <td><%= dl['charset'] %>／<%= dl['encoding'] %></td>
-    <td><%= dl['size'] %></td>
+    <td><%= dl['bytes'] %></td>
     <td><%= dl['created_on'] %></td>
     <td><%= dl['updated_on'] %></td>
 </tr>

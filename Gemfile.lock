@@ -97,7 +97,7 @@ GEM
     sassc (2.2.1)
       ffi (~> 1.9)
     servolux (0.13.0)
-    sort_kana_jisx4061 (0.2.0)
+    sort_kana_jisx4061 (0.3.0)
     temple (0.8.2)
     thor (1.0.1)
     thread_safe (0.3.6)

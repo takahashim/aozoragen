@@ -49,6 +49,7 @@ module Aozoragen
       "だ"=>[:ta, 1], "ぢ"=>[:ta, 2], "づ"=>[:ta, 3], "で"=>[:ta, 4], "ど"=>[:ta, 5],
       "ば"=>[:ha, 1], "び"=>[:ha, 2], "ぶ"=>[:ha, 3], "べ"=>[:ha, 4], "ぼ"=>[:ha, 5],
       "ぱ"=>[:ha, 1], "ぴ"=>[:ha, 2], "ぷ"=>[:ha, 3], "ぺ"=>[:ha, 4], "ぽ"=>[:ha, 5],
+      "ゔ"=>[:a, 3],
 
       "ア"=>[:a, 1],  "イ"=>[:a, 2],  "ウ"=>[:a, 3],  "エ"=>[:a, 4],  "オ"=>[:a, 5],
       "カ"=>[:ka, 1], "キ"=>[:ka, 2], "ク"=>[:ka, 3], "ケ"=>[:ka, 4], "コ"=>[:ka, 5],
@@ -66,6 +67,7 @@ module Aozoragen
       "ダ"=>[:ta, 1], "ヂ"=>[:ta, 2], "ヅ"=>[:ta, 3], "デ"=>[:ta, 4], "ド"=>[:ta, 5],
       "バ"=>[:ha, 1], "ビ"=>[:ha, 2], "ブ"=>[:ha, 3], "ベ"=>[:ha, 4], "ボ"=>[:ha, 5],
       "パ"=>[:ha, 1], "ピ"=>[:ha, 2], "プ"=>[:ha, 3], "ペ"=>[:ha, 4], "ポ"=>[:ha, 5],
+      "ヴ"=>[:a, 3],
     }
 
     def author_list_index_inpage(first_sym)
@@ -98,6 +100,34 @@ module Aozoragen
       str
     end
 
+def make_first_char(kana)
+  kata = NKF.nkf('-w --katakana', kana.gsub(/[“「『]/, ''))
+  kata[0]
+end
+
+def select_person(person)
+  first_char = make_first_char(person['name_kana'])
+  data = CHAR_LINK_MAP[first_char]
+  if data && data[0]
+    data[0]
+  else
+    nil
+  end
+end
+
+def select_list(list)
+  buf = {a:[],ka:[],sa:[],ta:[],na:[],ha:[],ma:[],ya:[],ra:[],wa:[]}
+  list.each do |person|
+    key = select_person(person)
+    buf[key] << person
+  end
+
+  buf.each do |k, v|
+    buf[k] = sort_kana_jisx4061_by(v){|item| item["name_kana"].gsub(/[“「『・]/, '')}
+  end
+  buf
+end
+
     def link_to_person_list_by_kana(name_kana, status = :open)
       first_char = name_kana[0]
       kana_postfix, num = CHAR_LINK_MAP[first_char]
@@ -113,11 +143,7 @@ module Aozoragen
     end
 
     def link_to_card(person, work)
-      if work['others']
-        person_id = work['others'][0]['person_id']
-      else
-        person_id = person['id']
-      end
+      person_id = work['person_id'] || person['id']
       link_to work['title'], sprintf("../cards/%06d/card%d.html", person_id, work["work_id"])
     end
 
@@ -146,6 +172,22 @@ module Aozoragen
         ''
       else
         %Q|<img src="../images/f#{ft[filetype]}.png" width="16" height="16" border="0" alt="#{filetype}アイコン">|
+      end
+    end
+
+    def base_person_tag(alt_id, alt_name)
+      if alt_id && alt_name
+        "(→<a href=\"person#{alt_id}.html\">#{alt_name}</a>)"
+      else
+        ''
+      end
+    end
+
+    def copyright_tag(val)
+      if val
+        '　<strong>＊著作権存続＊</strong>'
+      else
+        ''
       end
     end
   end
